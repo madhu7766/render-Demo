@@ -1,137 +1,375 @@
-<!DOCTYPE html>
 
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Income Prediction</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Income Predictor</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
-        body{
-            font-family: Arial, sans-serif;
-            max-width: 900px;
-            margin: 20px auto;
-            padding: 20px;
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
         }
 
-    h1{
-        text-align:center;
-    }
+        body{
+            font-family:'DM Sans',sans-serif;
+            background:linear-gradient(135deg,#f5f7fa,#e9f5f1);
+            min-height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            padding:30px 15px;
+        }
 
-    form{
-        display:grid;
-        gap:10px;
-    }
+        .container{
+            width:100%;
+            max-width:850px;
+        }
 
-    input, select, button{
-        padding:10px;
-        font-size:14px;
-    }
+        .card{
+            background:#fff;
+            border-radius:20px;
+            padding:35px;
+            box-shadow:0 10px 35px rgba(0,0,0,0.08);
+        }
 
-    button{
-        background:#0078d4;
-        color:white;
-        border:none;
-        cursor:pointer;
-    }
+        .title{
+            text-align:center;
+            font-size:32px;
+            font-weight:700;
+            color:#0f6e56;
+            margin-bottom:8px;
+        }
 
-    .result{
-        margin-top:20px;
-        padding:15px;
-        background:#f2f2f2;
-        border-radius:8px;
-        font-weight:bold;
-    }
-</style>
+        .subtitle{
+            text-align:center;
+            color:#666;
+            margin-bottom:30px;
+            font-size:14px;
+        }
 
+        .section-title{
+            font-size:13px;
+            font-weight:700;
+            text-transform:uppercase;
+            color:#0f6e56;
+            margin:25px 0 12px;
+            letter-spacing:1px;
+        }
 
+        .grid{
+            display:grid;
+            grid-template-columns:repeat(2,1fr);
+            gap:15px;
+        }
+
+        .single-grid{
+            display:grid;
+            grid-template-columns:1fr;
+            gap:15px;
+        }
+
+        .field{
+            display:flex;
+            flex-direction:column;
+        }
+
+        label{
+            margin-bottom:6px;
+            font-size:13px;
+            font-weight:600;
+            color:#444;
+        }
+
+        input,
+        select{
+            padding:12px;
+            border:1px solid #d9d9d9;
+            border-radius:10px;
+            font-size:14px;
+            outline:none;
+            transition:0.3s;
+        }
+
+        input:focus,
+        select:focus{
+            border-color:#1d9e75;
+            box-shadow:0 0 0 3px rgba(29,158,117,.15);
+        }
+
+        input[type="range"]{
+            padding:0;
+        }
+
+        .range-value{
+            color:#1d9e75;
+            font-weight:700;
+        }
+
+        .btn{
+            width:100%;
+            padding:14px;
+            margin-top:25px;
+            border:none;
+            border-radius:12px;
+            background:#1d9e75;
+            color:white;
+            font-size:15px;
+            font-weight:600;
+            cursor:pointer;
+            transition:0.3s;
+        }
+
+        .btn:hover{
+            background:#0f6e56;
+        }
+
+        .note{
+            text-align:center;
+            margin-top:10px;
+            font-size:12px;
+            color:#777;
+        }
+
+        .result{
+            margin-top:25px;
+            background:#e7f8f1;
+            border:1px solid #b9ead8;
+            padding:18px;
+            border-radius:12px;
+            text-align:center;
+        }
+
+        .result h3{
+            color:#0f6e56;
+            margin-bottom:5px;
+        }
+
+        @media(max-width:768px){
+            .grid{
+                grid-template-columns:1fr;
+            }
+
+            .card{
+                padding:22px;
+            }
+
+            .title{
+                font-size:26px;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-<h1>Adult Income Prediction</h1>
+<div class="container">
+    <div class="card">
 
-<form action="/predict" method="POST">
+        <h1 class="title">Income Predictor</h1>
+        <p class="subtitle">
+            Predict whether income exceeds $50K using demographic and employment information
+        </p>
 
-<input type="number" name="age" placeholder="Age" required>
+        <form action="/predict" method="POST">
 
-<select name="workclass" required>
-    <option value="Private">Private</option>
-    <option value="Self-emp-not-inc">Self-emp-not-inc</option>
-    <option value="Local-gov">Local-gov</option>
-    <option value="State-gov">State-gov</option>
-    <option value="Federal-gov">Federal-gov</option>
-</select>
+            <div class="section-title">Personal Information</div>
 
-<input type="number" name="fnlwgt" placeholder="fnlwgt" required>
+            <div class="grid">
 
-<select name="education" required>
-    <option value="Bachelors">Bachelors</option>
-    <option value="HS-grad">HS-grad</option>
-    <option value="Masters">Masters</option>
-    <option value="Doctorate">Doctorate</option>
-    <option value="Some-college">Some-college</option>
-</select>
+                <div class="field">
+                    <label>Age</label>
+                    <input type="number" name="age" min="17" max="90" required>
+                </div>
 
-<input type="number" name="educational_num" placeholder="Educational Number" required>
+                <div class="field">
+                    <label>Gender</label>
+                    <select name="gender" required>
+                        <option value="">Select</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                </div>
 
-<select name="marital_status" required>
-    <option value="Never-married">Never-married</option>
-    <option value="Married-civ-spouse">Married-civ-spouse</option>
-    <option value="Divorced">Divorced</option>
-    <option value="Separated">Separated</option>
-</select>
+                <div class="field">
+                    <label>Race</label>
+                    <select name="race" required>
+                        <option value="">Select</option>
+                        <option value="White">White</option>
+                        <option value="Black">Black</option>
+                        <option value="Asian-Pac-Islander">Asian-Pac-Islander</option>
+                        <option value="Amer-Indian-Eskimo">Amer-Indian-Eskimo</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
 
-<select name="occupation" required>
-    <option value="Prof-specialty">Prof-specialty</option>
-    <option value="Exec-managerial">Exec-managerial</option>
-    <option value="Sales">Sales</option>
-    <option value="Tech-support">Tech-support</option>
-    <option value="Craft-repair">Craft-repair</option>
-</select>
+                <div class="field">
+                    <label>Country</label>
+                    <select name="native_country" required>
+                        <option value="">Select</option>
+                        <option value="United-States">United States</option>
+                        <option value="India">India</option>
+                        <option value="Canada">Canada</option>
+                        <option value="England">England</option>
+                        <option value="Germany">Germany</option>
+                    </select>
+                </div>
 
-<select name="relationship" required>
-    <option value="Husband">Husband</option>
-    <option value="Wife">Wife</option>
-    <option value="Not-in-family">Not-in-family</option>
-    <option value="Own-child">Own-child</option>
-    <option value="Unmarried">Unmarried</option>
-</select>
+            </div>
 
-<select name="race" required>
-    <option value="White">White</option>
-    <option value="Black">Black</option>
-    <option value="Asian-Pac-Islander">Asian-Pac-Islander</option>
-    <option value="Amer-Indian-Eskimo">Amer-Indian-Eskimo</option>
-    <option value="Other">Other</option>
-</select>
+            <div class="section-title">Education & Work</div>
 
-<select name="gender" required>
-    <option value="Male">Male</option>
-    <option value="Female">Female</option>
-</select>
+            <div class="grid">
 
-<input type="number" name="capital_gain" placeholder="Capital Gain" value="0" required>
+                <div class="field">
+                    <label>Education</label>
+                    <select name="education" required>
+                        <option value="">Select</option>
+                        <option value="Bachelors">Bachelors</option>
+                        <option value="HS-grad">High School Graduate</option>
+                        <option value="Masters">Masters</option>
+                        <option value="Doctorate">Doctorate</option>
+                        <option value="Some-college">Some College</option>
+                    </select>
+                </div>
 
-<input type="number" name="capital_loss" placeholder="Capital Loss" value="0" required>
+                <div class="field">
+                    <label>Years of Education</label>
+                    <input type="number" name="educational_num" min="1" max="16" required>
+                </div>
 
-<input type="number" name="hours_per_week" placeholder="Hours Per Week" required>
+                <div class="field">
+                    <label>Work Class</label>
+                    <select name="workclass" required>
+                        <option value="">Select</option>
+                        <option value="Private">Private</option>
+                        <option value="Self-emp-not-inc">Self Employed</option>
+                        <option value="Local-gov">Local Government</option>
+                        <option value="State-gov">State Government</option>
+                        <option value="Federal-gov">Federal Government</option>
+                    </select>
+                </div>
 
-<select name="native_country" required>
-    <option value="United-States">United-States</option>
-    <option value="India">India</option>
-    <option value="Canada">Canada</option>
-    <option value="England">England</option>
-    <option value="Germany">Germany</option>
-</select>
+                <div class="field">
+                    <label>Occupation</label>
+                    <select name="occupation" required>
+                        <option value="">Select</option>
+                        <option value="Prof-specialty">Professional Specialty</option>
+                        <option value="Exec-managerial">Executive / Managerial</option>
+                        <option value="Sales">Sales</option>
+                        <option value="Tech-support">Tech Support</option>
+                        <option value="Craft-repair">Craft Repair</option>
+                    </select>
+                </div>
 
-<button type="submit">Predict Income</button>
+            </div>
 
+            <div class="section-title">Household Information</div>
 
-</form>
+            <div class="grid">
 
-{% if prediction_text %}
+                <div class="field">
+                    <label>Marital Status</label>
+                    <select name="marital_status" required>
+                        <option value="">Select</option>
+                        <option value="Never-married">Never Married</option>
+                        <option value="Married-civ-spouse">Married</option>
+                        <option value="Divorced">Divorced</option>
+                        <option value="Separated">Separated</option>
+                    </select>
+                </div>
 
-<div class="result">
-    {{ prediction_text }}
+                <div class="field">
+                    <label>Relationship</label>
+                    <select name="relationship" required>
+                        <option value="">Select</option>
+                        <option value="Husband">Husband</option>
+                        <option value="Wife">Wife</option>
+                        <option value="Not-in-family">Not in Family</option>
+                        <option value="Own-child">Own Child</option>
+                        <option value="Unmarried">Unmarried</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label>Capital Gain ($)</label>
+                    <input type="number" name="capital_gain" value="0" min="0" required>
+                </div>
+
+                <div class="field">
+                    <label>Capital Loss ($)</label>
+                    <input type="number" name="capital_loss" value="0" min="0" required>
+                </div>
+
+            </div>
+
+            <div class="section-title">Work Hours</div>
+
+            <div class="single-grid">
+                <div class="field">
+                    <label>
+                        Hours Per Week :
+                        <span class="range-value" id="hoursValue">40</span>
+                    </label>
+
+                    <input
+                        type="range"
+                        id="hours_per_week"
+                        name="hours_per_week"
+                        min="1"
+                        max="99"
+                        value="40"
+                    >
+                </div>
+            </div>
+
+            <div class="section-title">Census Information</div>
+
+            <div class="single-grid">
+                <div class="field">
+                    <label>Final Weight (fnlwgt)</label>
+                    <input
+                        type="number"
+                        name="fnlwgt"
+                        placeholder="e.g. 215646"
+                        required
+                    >
+                </div>
+            </div>
+
+            <button class="btn" type="submit">
+                Predict Income Bracket
+            </button>
+
+            <p class="note">
+                🔒 No data is stored. Prediction is generated instantly.
+            </p>
+
+        </form>
+
+        {% if prediction_text %}
+        <div class="result">
+            <h3>Prediction Result</h3>
+            <p>{{ prediction_text }}</p>
+        </div>
+        {% endif %}
+
+    </div>
 </div>
-{% endif %}
+
+<script>
+    const slider = document.getElementById("hours_per_week");
+    const value = document.getElementById("hoursValue");
+
+    slider.addEventListener("input", function() {
+        value.textContent = this.value;
+    });
+</script>
 
 </body>
 </html>
+
